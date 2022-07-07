@@ -18,7 +18,7 @@ class LegacyNavigationBlock {
     // - - - Registers
 
     public function attachHooks(){
-        /*
+
         add_filter( 'block_categories_all', function ( $categories, $post ) {
 
             foreach ( $categories as $category ) {
@@ -38,7 +38,7 @@ class LegacyNavigationBlock {
             );
 
         }, 10, 2 );
-        */
+
 
 
         add_action( 'init', [ $this, 'doRegister' ] );
@@ -46,21 +46,21 @@ class LegacyNavigationBlock {
 
     public function doRegister(){
 
-        //$this->registerScriptsAndStyles();
-        //$this->registerBlock();
+        $this->registerScriptsAndStyles();
+        $this->registerBlock();
     }
 
     public function registerScriptsAndStyles(){
 
         wp_register_script(
             'block-editor-' . $this->blockSlug ,
-            $this->getPluginUrl() . 'dist/' . $this->blockSlug . '.min.js',
+            $this->getPluginUrl() . 'dist/blocks/' . $this->blockSlug . '.min.js',
             array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' )
         );
 
         wp_register_style(
             'block-' . $this->blockSlug ,
-            $this->getPluginUrl() . 'dist/' . $this->blockSlug . '.min.css'
+            $this->getPluginUrl() . 'dist/blocks/' . $this->blockSlug . '.min.css'
         );
 
     }
@@ -75,7 +75,7 @@ class LegacyNavigationBlock {
 
             'render_callback' => function ( $attributes, $content ) {
                 ob_start();
-                include( $this->getPluginPath() . '/core/render-' . $this->blockSlug . '.php' );
+                include( $this->getPluginPath() . '/core/render/render-' . $this->blockSlug . '.php' );
                 return ob_get_clean();
             },
 
@@ -98,8 +98,8 @@ class LegacyNavigationBlock {
 
     private function getBlockAttributes(){
 
-        if( file_exists( $this->getPluginPath() . 'dist/' .  $this->blockSlug . '.attributes.json' ) ) {
-            return json_decode( file_get_contents( $this->getPluginPath() . 'dist/' .  $this->blockSlug . '.attributes.json' ), true ) ;
+        if( file_exists( $this->getPluginPath() . 'dist/blocks/' .  $this->blockSlug . '.attributes.json' ) ) {
+            return json_decode( file_get_contents( $this->getPluginPath() . 'dist/blocks/' .  $this->blockSlug . '.attributes.json' ), true ) ;
         }
 
         return [];
@@ -124,8 +124,8 @@ class LegacyNavigationBlock {
         $this->blockTitle  = __( 'Legacy Navigation Block', 'legacy-navigation-block' );
         $this->blockSlug   = 'legacy-navigation-block' ;
 
-        $this->plugin_path = plugin_dir_path( dirname( __FILE__, 1 ) );
-        $this->plugin_url  = plugins_url( '/', dirname( __FILE__, 1 ) ) ;
+        $this->plugin_path = plugin_dir_path( dirname( __FILE__, 2 ) );
+        $this->plugin_url  = plugins_url( '/', dirname( __FILE__, 2 ) ) ;
         $this->attachHooks();
     }
 
